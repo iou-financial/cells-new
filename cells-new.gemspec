@@ -1,13 +1,13 @@
 require_relative 'lib/cell/version'
 
 Gem::Specification.new do |spec|
-  spec.name        = 'cells'
+  spec.name        = 'cells-new'
   spec.version     = Cell::VERSION
   spec.authors     = ['Nick Sutterer']
   spec.email       = ['apotonick@gmail.com']
-  spec.homepage    = 'https://github.com/trailblazer/cells'
+  spec.homepage    = 'https://github.com/iou-fnancial/cells-new'
   spec.summary     = 'View Models for Ruby and Rails.'
-  spec.description = 'View Models for Ruby and Rails, replacing helpers and partials while giving you a clean view architecture with proper encapsulation.'
+  spec.description = 'View Models for Ruby and Rails, replacing helpers and partials while giving you a clean view architecture with proper encapsulation. This is a fork to rename the gem from cells to cells-new so that we can use this gem and apotomo which requires and older version used in tandem.'
   spec.license     = 'MIT'
 
   spec.metadata['bug_tracker_uri'] = "#{spec.homepage}/issues"
