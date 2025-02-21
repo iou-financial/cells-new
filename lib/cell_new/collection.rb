@@ -1,12 +1,12 @@
-module Cell
+module CellNew
   class Collection
-    def initialize(ary, options, cell_class)
+    def initialize(ary, options, cell_new_class)
       options.delete(:collection)
       set_deprecated_options(options) # TODO: remove in 5.0.
 
       @ary        = ary
-      @options    = options    # these options are "final" and will be identical for all collection cells.
-      @cell_class = cell_class
+      @options    = options    # these options are "final" and will be identical for all collection cell_news.
+      @cell_new_class = cell_new_class
     end
 
     def set_deprecated_options(options) # TODO: remove in 5.0.
@@ -16,7 +16,7 @@ module Cell
 
     module Call
       def call(state=:show)
-        join(collection_join) { |cell, i| cell.(method || state) }
+        join(collection_join) { |cell_new, i| cell_new.(method || state) }
       end
 
     end
@@ -26,13 +26,13 @@ module Cell
       call
     end
 
-    # Iterate collection and build a cell for each item.
-    # The passed block receives that cell and the index.
+    # Iterate collection and build a cell_new for each item.
+    # The passed block receives that cell_new and the index.
     # Its return value is captured and joined.
     def join(separator="", &block)
       @ary.each_with_index.collect do |model, i|
-        cell = @cell_class.build(model, @options)
-        block_given? ? yield(cell, i) : cell
+        cell_new = @cell_new_class.build(model, @options)
+        block_given? ? yield(cell_new, i) : cell_new
       end.join(separator)
     end
 
@@ -51,8 +51,8 @@ module Cell
     attr_accessor :collection_join, :method
 
     extend Gem::Deprecate
-    deprecate :method=, "`call(method)` as documented here: http://trailblazer.to/gems/cells/api.html#collection", 2016, 7
-    deprecate :collection_join=, "`join(\"<br>\")` as documented here: http://trailblazer.to/gems/cells/api.html#collection", 2016, 7
+    deprecate :method=, "`call(method)` as documented here: http://trailblazer.to/gems/cell_news/api.html#collection", 2016, 7
+    deprecate :collection_join=, "`join(\"<br>\")` as documented here: http://trailblazer.to/gems/cell_news/api.html#collection", 2016, 7
   end
 end
 

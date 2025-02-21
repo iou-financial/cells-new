@@ -1,32 +1,32 @@
 require "uber/inheritable_attr"
 
-module Cell
+module CellNew
   # Builder methods and Capybara support.
   # This gets included into Test::Unit, MiniTest::Spec, etc.
   module Testing
-    def cell(name, *args)
-      cell_for(ViewModel, name, *args)
+    def cell_new(name, *args)
+      cell_new_for(ViewModel, name, *args)
     end
 
     def concept(name, *args)
-      cell_for(Concept, name, *args)
+      cell_new_for(Concept, name, *args)
     end
 
   private
-    def cell_for(baseclass, name, model=nil, options={})
+    def cell_new_for(baseclass, name, model=nil, options={})
       options[:context] ||= {}
       options[:context][:controller] = controller
 
-      cell = baseclass.cell(name, model, options)
+      cell_new = baseclass.cell_new(name, model, options)
 
-      cell.extend(Capybara) if Cell::Testing.capybara? # leaving this here as most people use Capybara.
+      cell_new.extend(Capybara) if CellNew::Testing.capybara? # leaving this here as most people use Capybara.
       # apparently it's ok to only override ViewModel#call and capybararize the result.
       # when joining in a Collection, the joint will still be capybararized.
-      cell
+      cell_new
     end
 
 
-    # Set this to true if you have Capybara loaded. Happens automatically in Cell::TestCase.
+    # Set this to true if you have Capybara loaded. Happens automatically in CellNew::TestCase.
     def self.capybara=(value)
       @capybara = value
     end
@@ -49,9 +49,9 @@ module Cell
     end
 
     module ControllerFor
-      # This method is provided by the cells-rails gem.
+      # This method is provided by the cell_news-rails gem.
       def controller_for(controller_class)
-        # raise "[Cells] Please install (or update?) the cells-rails gem."
+        # raise "[CellNews] Please install (or update?) the cell_news-rails gem."
       end
     end
     include ControllerFor

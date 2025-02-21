@@ -1,4 +1,4 @@
-module Cell::Abstract
+module CellNew::Abstract
   def abstract!
     @abstract = true
   end

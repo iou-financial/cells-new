@@ -1,7 +1,7 @@
 require "trailblazer/option"
 require "uber/callable"
 
-module Cell
+module CellNew
   # Extend `Trailblazer::Option` to make static values as callables too.
   class Option < ::Trailblazer::Option
     def self.build(value)
@@ -24,7 +24,7 @@ module Cell
   end
 
   def self.Option(value)
-    ::Cell::Option.build(value)
+    ::CellNew::Option.build(value)
   end
 
   def self.Options(options)

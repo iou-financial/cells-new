@@ -1,7 +1,7 @@
 # Allows to render global partials, for example.
 #
 #   render partial: "../views/shared/container"
-module Cell::ViewModel::Partial
+module CellNew::ViewModel::Partial
   def process_options!(options)
     super
     return unless partial = options[:partial]

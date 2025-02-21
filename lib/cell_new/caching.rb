@@ -1,4 +1,4 @@
-module Cell
+module CellNew
   module Caching
     def self.included(includer)
       includer.class_eval do
@@ -18,9 +18,9 @@ module Cell
       def cache(state, *args, &block)
         options = args.last.is_a?(Hash) ? args.pop : {} # I have to admit, Array#extract_options is a brilliant tool.
 
-        conditional_procs[state] = Cell::Option(options.delete(:if) || true)
-        version_procs[state]     = Cell::Option(args.first || block)
-        cache_options[state]     = Cell::Options(options)
+        conditional_procs[state] = CellNew::Option(options.delete(:if) || true)
+        version_procs[state]     = CellNew::Option(args.first || block)
+        cache_options[state]     = CellNew::Options(options)
       end
 
       # Computes the complete, namespaced cache key for +state+.
@@ -49,7 +49,7 @@ module Cell
       fetch_from_cache_for(key, options) { super(state, *args) }
     end
 
-    def cache_store  # we want to use DI to set a cache store in cell/rails.
+    def cache_store  # we want to use DI to set a cache store in cell_new/rails.
       raise "No cache store has been set."
     end
 

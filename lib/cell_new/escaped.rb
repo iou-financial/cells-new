@@ -1,4 +1,4 @@
-module Cell::ViewModel::Escaped
+module CellNew::ViewModel::Escaped
   def self.included(includer)
     includer.extend Property
   end
@@ -21,7 +21,7 @@ module Cell::ViewModel::Escaped
     end
   end # Property
 
-  # Can be used as a helper in the cell, too.
+  # Can be used as a helper in the cell_new, too.
   # Feel free to override and use a different escaping implementation.
   require "erb"
   def escape!(string)

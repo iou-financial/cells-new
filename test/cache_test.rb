@@ -19,7 +19,7 @@ class CacheTest < Minitest::Spec
     end
   end
 
-  class Index < Cell::ViewModel
+  class Index < CellNew::ViewModel
     cache :show
     include Cache
   end

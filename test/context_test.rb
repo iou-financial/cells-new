@@ -1,7 +1,7 @@
 require "test_helper"
 
 class ContextTest < Minitest::Spec
-  class ParentCell < Cell::ViewModel
+  class ParentCellNew < CellNew::ViewModel
     def user
       context[:user]
     end
@@ -15,15 +15,15 @@ class ContextTest < Minitest::Spec
   let (:user) { Object.new }
   let (:controller) { Object.new }
 
-  let (:parent) { ParentCell.(model, admin: true, context: { user: user, controller: controller }) }
+  let (:parent) { ParentCellNew.(model, admin: true, context: { user: user, controller: controller }) }
 
   it do
     assert_equal model, parent.model
     assert_equal controller, parent.controller
     assert_equal user, parent.user
 
-    # nested cell
-    child = parent.cell("context_test/parent", "")
+    # nested cell_new
+    child = parent.cell_new("context_test/parent", "")
 
     assert_equal "", child.model
     assert_equal controller, child.controller
@@ -32,7 +32,7 @@ class ContextTest < Minitest::Spec
 
   # child can add to context
   it do
-    child = parent.cell(ParentCell, nil, context: { "is_child?" => true })
+    child = parent.cell_new(ParentCellNew, nil, context: { "is_child?" => true })
 
     assert_nil parent.context["is_child?"]
 

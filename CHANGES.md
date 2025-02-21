@@ -17,7 +17,7 @@
 
 ## 4.1.5
 
-* Fix a bug where nested calls of `cell(name, context: {...})` would ignore the new context elements, resulting in the old context being passed on. By adding `Context::[]` the new elements are now properly merged into a **new context hash**. This means that adding elements to the child context won't leak up into the parent context anymore.
+* Fix a bug where nested calls of `cell_new(name, context: {...})` would ignore the new context elements, resulting in the old context being passed on. By adding `Context::[]` the new elements are now properly merged into a **new context hash**. This means that adding elements to the child context won't leak up into the parent context anymore.
 
 ## 4.1.4
 
@@ -25,7 +25,7 @@
 
 ## 4.1.3
 
-* Load `Uber::InheritableAttr` in `Testing` to fix a bug in `cells-rspec`.
+* Load `Uber::InheritableAttr` in `Testing` to fix a bug in `cell_news-rspec`.
 
 ## 4.1.2
 
@@ -39,11 +39,11 @@
 
 ### API Fix/Changes
 
-* All Rails code removed. Make sure to use [Cells-rails](https://github.com/trailblazer/cells-rails) if you want the old Rails behavior.
-* The `builds` feature is now optional, you have to include `Builder` in your cell.
+* All Rails code removed. Make sure to use [CellNews-rails](https://github.com/trailblazer/cell_news-rails) if you want the old Rails behavior.
+* The `builds` feature is now optional, you have to include `Builder` in your cell_new.
     ```ruby
-    class CommentCell < Cell::ViewModel
-      include Cell::Builder
+    class CommentCellNew < CellNew::ViewModel
+      include CellNew::Builder
 
       builds do |..|
     ```
@@ -52,7 +52,7 @@
 * `ViewModel#render` now accepts a block that can be `yield`ed in the view.
 * Passing a block to `ViewModel#call` changed. Use `tap` if you want the "old" behavior (which was never official or documented).
     ```ruby
-    Comment::Cell.new(comment).().tap { |cell| }
+    Comment::CellNew.new(comment).().tap { |cell_new| }
     ```
     The new behavior is to pass that block to your state method. You can pass it on to `render`, and then `yield` it in the template.
 
@@ -63,34 +63,34 @@
     ```
 
     Note that this happens automatically in the default `ViewModel#show` method.
-* `Concept#cell` now will resolve a concept cell (`Song::Cell`), and not the old-style suffix cell (`SongCell`). The same applies to `Concept#concept`.
+* `Concept#cell_new` now will resolve a concept cell_new (`Song::CellNew`), and not the old-style suffix cell_new (`SongCellNew`). The same applies to `Concept#concept`.
 
     ```ruby
-    concept("song/cell", song).cell("song/cell/composer") #=> resolves to Song::Cell::Composer
+    concept("song/cell_new", song).cell_new("song/cell_new/composer") #=> resolves to Song::CellNew::Composer
     ```
-    This decision has been made in regards of the upcoming Cells 5. It simplifies code dramatically, and we consider it unnatural to mix concept and suffix cells in applications.
+    This decision has been made in regards of the upcoming CellNews 5. It simplifies code dramatically, and we consider it unnatural to mix concept and suffix cell_news in applications.
 * In case you were using `@parent_controller`, this doesn't exist anymore (and was never documented, either). Use `context[:controller]`.
-* `::self_contained!` is no longer included into `ViewModel`. Please try using `Trailblazer::Cell` instead. If you still need it, here's how.
+* `::self_contained!` is no longer included into `ViewModel`. Please try using `Trailblazer::CellNew` instead. If you still need it, here's how.
 
     ```ruby
-    class SongCell < Cell::ViewModel
+    class SongCellNew < CellNew::ViewModel
       extend SelfContained
       self_contained!
     ```
-* `Cell::Concept` is deprecated and you should be using the excellent [`Trailblazer::Cell`](https://github.com/trailblazer/trailblazer-cells) class instead, because that's what a concept cell tries to be in an awkward way. The latter is usable without Trailblazer.
+* `CellNew::Concept` is deprecated and you should be using the excell_newent [`Trailblazer::CellNew`](https://github.com/trailblazer/trailblazer-cell_news) class instead, because that's what a concept cell_new tries to be in an awkward way. The latter is usable without Trailblazer.
 
-    We are hereby dropping support for `Cell::Concept` (it still works).
+    We are hereby dropping support for `CellNew::Concept` (it still works).
 
 * Deprecating `:collection_join` and `:method` for collections.
 
 ### Awesomeness
 
-* Introduced the concept of a context object that is being passed to all nested cells. This object is supposed to contain dependencies such as `current_user`, in Rails it contains the "parent_controller" under the `context[:controller]` key.
+* Introduced the concept of a context object that is being passed to all nested cell_news. This object is supposed to contain dependencies such as `current_user`, in Rails it contains the "parent_controller" under the `context[:controller]` key.
 
-    Simple provide it as an option when rendering the cell.
+    Simple provide it as an option when rendering the cell_new.
 
     ```ruby
-    cell(:song, song, context: { current_user: current_user })
+    cell_new(:song, song, context: { current_user: current_user })
     ```
 
     The `#context` method allows to access this very hash.
@@ -100,31 +100,31 @@
       context[:current_user].admin? "Admin" : "A nobody"
     end
     ```
-* The `cell` helper now allows to pass in a constant, too.
+* The `cell_new` helper now allows to pass in a constant, too.
 
     ```ruby
-    cell(Song::Cell, song)
+    cell_new(Song::CellNew, song)
     ```
 * New API for `:collection`. If used in views, this happens automatically, but here's how it works now.
 
     ```ruby
-    cell(:comment, collection: Comment.all).() # will invoke show.
-    cell(:comment, collection: Comment.all).(:item) # will invoke item.
-    cell(:comment, collection: Comment.all).join { |cell, i| cell.show(index: i) }
+    cell_new(:comment, collection: Comment.all).() # will invoke show.
+    cell_new(:comment, collection: Comment.all).(:item) # will invoke item.
+    cell_new(:comment, collection: Comment.all).join { |cell_new, i| cell_new.show(index: i) }
     ```
-    Basically, a `Collection` instance is returned that optionally allows to invoke each cell manually.
-* Layout cells can now be injected to wrap the original content.
+    Basically, a `Collection` instance is returned that optionally allows to invoke each cell_new manually.
+* Layout cell_news can now be injected to wrap the original content.
     ```ruby
-    cell(:comment, Comment.find(1), layout: LayoutCell)
+    cell_new(:comment, Comment.find(1), layout: LayoutCellNew)
     ```
 
-    The LayoutCell will be instantiated and the `show` state invoked. The content cell's content is passed as a block, allowing the layout's view to `yield`.
+    The LayoutCellNew will be instantiated and the `show` state invoked. The content cell_new's content is passed as a block, allowing the layout's view to `yield`.
 
     This works with `:collection`, too.
 
 ## 4.0.5
 
-* Fix `Testing` so you can use Capybara matchers on `cell(:song, collection: [..])`.
+* Fix `Testing` so you can use Capybara matchers on `cell_new(:song, collection: [..])`.
 
 ## 4.0.4
 
@@ -132,15 +132,15 @@
 
 ## 4.0.3
 
-* `Cell::Partial` now does _append_ the global partial path to its `view_paths` instead of using `unshift` and thereby removing possible custom paths.
-* Adding `Cell::Translation` which allows using the `#t` helper. Thanks to @johnlane.
+* `CellNew::Partial` now does _append_ the global partial path to its `view_paths` instead of using `unshift` and thereby removing possible custom paths.
+* Adding `CellNew::Translation` which allows using the `#t` helper. Thanks to @johnlane.
 * Performance improvement: when inflecting the view name (90% likely to be done) the `caller` is now limited to the data we need, saving memory. Thanks @timoschilling for implementing this.
 * In the `concept` helper, we no longer use `classify`, which means you can say `concept("comment/data")` and it will instantiate `Comment::Data` and not `Comment::Datum`. Thanks @firedev!
 
 ## 4.0.2
 
-* In Rails, include `ActionView::Helpers::FormHelper` into `ViewModel` so we already have (and pollute our cell with) `UrlHelper` and `FormTagHelper`. Helpers, so much fun.
-* Concept cells will now infer their name properly even if the string `Cell` appears twice.
+* In Rails, include `ActionView::Helpers::FormHelper` into `ViewModel` so we already have (and pollute our cell_new with) `UrlHelper` and `FormTagHelper`. Helpers, so much fun.
+* Concept cell_news will now infer their name properly even if the string `CellNew` appears twice.
 
 ## 4.0.1
 
@@ -150,24 +150,24 @@
 
 * **Rails Support:** Rails 4.0+ is fully supported, in older versions some form helpers do not work. Let us know how you fixed this.
 * **State args:** View models don't use state args. Options are passed into the constructor and saved there. That means that caching callbacks no longer receive arguments as everything is available via the instance itself.
-* `ViewModel.new(song: song)` won't automatically create a reader `#song`. You have to configure the cell to use a Struct twin {TODO: document}
+* `ViewModel.new(song: song)` won't automatically create a reader `#song`. You have to configure the cell_new to use a Struct twin {TODO: document}
 * **HTML Escaping:** Escaping only happens for defined `property`s when `Escaped` is included.
-* **Template Engines:** There's now _one_ template engine (e.g. ERB or HAML) per cell class. It can be set by including the respective module (e.g. `Cell::Erb`) into the cell class. This happens automatically in Rails.
+* **Template Engines:** There's now _one_ template engine (e.g. ERB or HAML) per cell_new class. It can be set by including the respective module (e.g. `CellNew::Erb`) into the cell_new class. This happens automatically in Rails.
 * **File Naming**. The default filename just uses the engine suffix, e.g. `show.haml`. If you have two different engine formats (e.g. `show.haml` and `show.erb`), use the `format:` option: `render format: :erb`.
     If you need to render a specific mime type, provide the filename: `render view: "show.html"`.
-* Builder blocks are no longer executed in controller context but in the context they were defined. This is to remove any dependencies to the controller. If you need e.g. `params`, pass them into the `#cell(..)` call.
+* Builder blocks are no longer executed in controller context but in the context they were defined. This is to remove any dependencies to the controller. If you need e.g. `params`, pass them into the `#cell_new(..)` call.
 * Builders are now defined using `::builds`, not `::build`.
 
 ### Removed
 
-* `Cell::Rails` and `Cell::Base` got removed. Every cell is `ViewModel` or `Concept` now.
-* All methods from `AbstractController` are gone. This might give you trouble in case you were using `helper_method`. You don't need this anymore - every method included in the cell class is a "helper" in the view (it's one and the same method call).
+* `CellNew::Rails` and `CellNew::Base` got removed. Every cell_new is `ViewModel` or `Concept` now.
+* All methods from `AbstractController` are gone. This might give you trouble in case you were using `helper_method`. You don't need this anymore - every method included in the cell_new class is a "helper" in the view (it's one and the same method call).
 
 
 ## 4.0.0.rc2
 
-* Include `#protect_from_forgery?` into Rails cells. It returns false currently.
-* Fix `Concept#cell` which now instantiates a cell, not a concept cell.
+* Include `#protect_from_forgery?` into Rails cell_news. It returns false currently.
+* Fix `Concept#cell_new` which now instantiates a cell_new, not a concept cell_new.
 
 ## 4.0.0.rc1
 
@@ -175,43 +175,43 @@
 
 ## 4.0.0.beta6
 
-* Removed `ViewModel::template_engine`. This is now done explicitly by including `Cell::Erb`, etc. and happens automatically in a Rails environment.
+* Removed `ViewModel::template_engine`. This is now done explicitly by including `CellNew::Erb`, etc. and happens automatically in a Rails environment.
 
 ## 4.0.0.beta5
 
-* Assets bundled in engine cells now work.
-* Directory change: Assets like `.css`, `.coffee` and `.js`, no longer have their own `assets/` directory but live inside the views directory of a cell. It turned out that two directories `views/` and `assets/` was too noisy for most users. If you think you have a valid point for re-introducing it, email me, it is not hard to implement.
-* When bundling your cell's assets into the asset pipeline, you have to specify the full name of your cell. The names will be constantized.
+* Assets bundled in engine cell_news now work.
+* Directory change: Assets like `.css`, `.coffee` and `.js`, no longer have their own `assets/` directory but live inside the views directory of a cell_new. It turned out that two directories `views/` and `assets/` was too noisy for most users. If you think you have a valid point for re-introducing it, email me, it is not hard to implement.
+* When bundling your cell_new's assets into the asset pipeline, you have to specify the full name of your cell_new. The names will be constantized.
 
     ```ruby
-    config.cells.with_assets = ["song/cell", "user_cell"] #=> Song::Cell, UserCell
+    config.cell_news.with_assets = ["song/cell_new", "user_cell_new"] #=> Song::CellNew, UserCellNew
     ```
 * `ViewModel` is now completely decoupled from Rails and doesn't inherit from AbstractController anymore.
-* API change: The controller dependency is now a second-class citizen being passed into the cell via options.
+* API change: The controller dependency is now a second-class citizen being passed into the cell_new via options.
 
     ```ruby
-    Cell.new(model, {controller: ..})
+    CellNew.new(model, {controller: ..})
     ```
 * Removing `actionpack` from gemspec.
 
 ## 4.0.0.beta4
 
 * Fixed a bug when rendering more than once with ERB, the output buffer was being reused.
-*  API change: ViewModel::_prefixes now returns the "fully qualified" pathes including the view paths, prepended to the prefixes. This allows multiple view paths and basically fixes cells in engines.
-* The only public way to retrieve prefixes for a cell is `ViewModel::prefixes`. The result is cached.
+*  API change: ViewModel::_prefixes now returns the "fully qualified" pathes including the view paths, prepended to the prefixes. This allows multiple view paths and basically fixes cell_news in engines.
+* The only public way to retrieve prefixes for a cell_new is `ViewModel::prefixes`. The result is cached.
 
 
 ## 4.0.0.beta3
 
-* Introduce `Cell::Testing` for Rspec and MiniTest.
+* Introduce `CellNew::Testing` for Rspec and MiniTest.
 * Add ViewModel::OutputBuffer to be used in Erbse and soon in Haml.
 
 ## 3.11.2
 
-* `ViewModel#call` now accepts a block and yields `self` (the cell instance) to it. This is handy to use with `content_for`.
+* `ViewModel#call` now accepts a block and yields `self` (the cell_new instance) to it. This is handy to use with `content_for`.
     ```ruby
-      = cell(:song, Song.last).call(:show) do |cell|
-        content_for :footer, cell.footer
+      = cell_new(:song, Song.last).call(:show) do |cell_new|
+        content_for :footer, cell_new.footer
     ```
 
 ## 3.11.1
@@ -223,36 +223,36 @@
 
 ## 3.11.0
 
-* Deprecated `Cell::Rails::ViewModel`, please inherit: `class SongCell < Cell::ViewModel`.
+* Deprecated `CellNew::Rails::ViewModel`, please inherit: `class SongCellNew < CellNew::ViewModel`.
 * `ViewModel#call` is now the prefered way to invoke the rendering flow. Without any argument, `call` will run `render_state(:show)`. Pass in any method name you want.
 * Added `Caching::Notifications`.
-* Added `cell(:song, collection: [song1, song2])` to render collections. This only works with ViewModel (and, of course, Concept, too).
+* Added `cell_new(:song, collection: [song1, song2])` to render collections. This only works with ViewModel (and, of course, Concept, too).
 * Added `::inherit_views` to only inherit views whereas real class inheritance would inherit all the dark past of the class.
-* `::build_for` removed/privatized/changed. Use `Cell::Base::cell_for` instead.
-* `Base::_parent_prefixes` is no longer used, if you override that somewhere in your cells it will break. We have our own implementation for computing the controller's prefixes in `Cell::Base::Prefixes` (simpler).
-* `#expire_cell_state` doesn't take symbols anymore, only the real cell class name.
-* Remove `Cell::Base.setup_view_paths!` and `Cell::Base::DEFAULT_VIEW_PATHS` and the associated Railtie. I don't know why this code survived 3 major versions, if you wanna set you own view paths just use `Cell::Base.view_paths=`.
+* `::build_for` removed/privatized/changed. Use `CellNew::Base::cell_new_for` instead.
+* `Base::_parent_prefixes` is no longer used, if you override that somewhere in your cell_news it will break. We have our own implementation for computing the controller's prefixes in `CellNew::Base::Prefixes` (simpler).
+* `#expire_cell_new_state` doesn't take symbols anymore, only the real cell_new class name.
+* Remove `CellNew::Base.setup_view_paths!` and `CellNew::Base::DEFAULT_VIEW_PATHS` and the associated Railtie. I don't know why this code survived 3 major versions, if you wanna set you own view paths just use `CellNew::Base.view_paths=`.
 * Add `Base::self_contained!`.
 * Add `Base::inherit_views`.
 
 ### Concept
-* `#concept` helper is mixed into all views as an alternative to `#cell` and `#render_cell`. Let us know if we should do that conditionally, only.
-* Concept cells look for layouts in their self-contained views directory.
-* Add generator for Concept cells: `rails g concept Comment`
+* `#concept` helper is mixed into all views as an alternative to `#cell_new` and `#render_cell_new`. Let us know if we should do that conditionally, only.
+* Concept cell_news look for layouts in their self-contained views directory.
+* Add generator for Concept cell_news: `rails g concept Comment`
 
 
 ## 3.10.1
-Allow packaging assets for Rails' asset pipeline into cells. This is still experimental but works great. I love it.
+Allow packaging assets for Rails' asset pipeline into cell_news. This is still experimental but works great. I love it.
 
 ## 3.10.0
 
-* API CHANGE: Blocks passed to `::cache` and `::cache ... if: ` no longer receive the cell instance as the first argument. Instead, they're executed in cell instance context. Change your code like this:
+* API CHANGE: Blocks passed to `::cache` and `::cache ... if: ` no longer receive the cell_new instance as the first argument. Instead, they're executed in cell_new instance context. Change your code like this:
 ```ruby
-cache :show do |cell, options|
-  cell.version
+cache :show do |cell_new, options|
+  cell_new.version
 end
 # and
-cache :show, if: lambda {|cell, options| .. }
+cache :show, if: lambda {|cell_new, options| .. }
 ```
 should become
 
@@ -264,7 +264,7 @@ end
 cache :show, if: lambda {|options| .. }
 ```
 
-Since the blocks are run in cell context, `self` will point to what was `cell` before.
+Since the blocks are run in cell_new context, `self` will point to what was `cell_new` before.
 
 
 * `::cache` doesn't accept a `Proc` instance anymore, only blocks (was undocumented anyway).
@@ -272,7 +272,7 @@ Since the blocks are run in cell context, `self` will point to what was `cell` b
 
 ## 3.9.2
 
-* Autoload `Cell::Rails::ViewModel`.
+* Autoload `CellNew::Rails::ViewModel`.
 * Implement dynamic cache options by allowing lambdas that are executed at render-time - Thanks to @bibendi for this idea.
 
 ## 3.9.1
@@ -282,11 +282,11 @@ Since the blocks are run in cell context, `self` will point to what was `cell` b
 
 ## 3.9.0
 
-* Cells in engines are now recognized under Rails 4.0.
-* Introducing @#cell@ and @#cell_for@ to instantiate cells in ActionController and ActionView.
-* Adding @Cell::Rails::ViewModel@ as a new "dialect" of working with cells.
-* Add @Cell::Base#process_args@ which is called in the initializer to handle arguments passed into the constructor.
-* Setting @controller in your @Cell::TestCase@ no longer get overridden by us.
+* CellNews in engines are now recognized under Rails 4.0.
+* Introducing @#cell_new@ and @#cell_new_for@ to instantiate cell_news in ActionController and ActionView.
+* Adding @CellNew::Rails::ViewModel@ as a new "dialect" of working with cell_news.
+* Add @CellNew::Base#process_args@ which is called in the initializer to handle arguments passed into the constructor.
+* Setting @controller in your @CellNew::TestCase@ no longer get overridden by us.
 
 ## 3.8.8
 
@@ -294,23 +294,23 @@ Since the blocks are run in cell context, `self` will point to what was `cell` b
 
 ## 3.8.7
 
-* Cells runs with Rails 4.
+* CellNews runs with Rails 4.
 
 ## 3.8.6
 
-* @cell/base@ can now be required without trouble.
-* Generated test files now respect namespaced cells.
+* @cell_new/base@ can now be required without trouble.
+* Generated test files now respect namespaced cell_news.
 
 ## 3.8.5
 
-* Added @Cell::Rails::HelperAPI@ module to provide the entire Rails view "API" (quotes on purpose!) in cells running completely outside of Rails. This makes it possible to use gems like simple_form in any Ruby environment, especially interesting for people using Sinatra, webmachine, etc.
+* Added @CellNew::Rails::HelperAPI@ module to provide the entire Rails view "API" (quotes on purpose!) in cell_news running completely outside of Rails. This makes it possible to use gems like simple_form in any Ruby environment, especially interesting for people using Sinatra, webmachine, etc.
 * Moved @Caching.expire_cache_key@ to @Rails@. Use @Caching.expire_cache_key_for(key, cache_store, ..)@ if you want to expire caches outside of Rails.
 
 ## 3.8.4
 
-* Added @Cell::Rack@ for request-dependent Cells. This is also the new base class for @Cells::Rails@.
-* Removed deprecation warning from @TestCase#cell@ as it's signature is not deprecated.
-* Added the @base_cell_class@ config option to generator for specifying an alternative base class.
+* Added @CellNew::Rack@ for request-dependent CellNews. This is also the new base class for @CellNews::Rails@.
+* Removed deprecation warning from @TestCase#cell_new@ as it's signature is not deprecated.
+* Added the @base_cell_new_class@ config option to generator for specifying an alternative base class.
 
 ## 3.8.3
 
@@ -326,12 +326,12 @@ Since the blocks are run in cell context, `self` will point to what was `cell` b
 
 ## 3.8.0
 
-* @Cell::Base@ got rid of the controller dependency. If you want the @ActionController@ instance around in your cell, use @Cell::Rails@ - this should be the default in a standard Rails setup. However, if you plan on using a Cell in a Rack middleware or don't need the controller, use @Cell::Base@.
+* @CellNew::Base@ got rid of the controller dependency. If you want the @ActionController@ instance around in your cell_new, use @CellNew::Rails@ - this should be the default in a standard Rails setup. However, if you plan on using a CellNew in a Rack middleware or don't need the controller, use @CellNew::Base@.
 * New API (note that @controller@ isn't the first argument anymore):
-** @Rails.create_cell_for(name, controller)@
-** @Rails.render_cell_for(name, state, controller, *args)@
-* Moved builder methods to @Cell::Builder@ module.
-* @DEFAULT_VIEW_PATHS@ is now in @Cell::Base@.
+** @Rails.create_cell_new_for(name, controller)@
+** @Rails.render_cell_new_for(name, state, controller, *args)@
+* Moved builder methods to @CellNew::Builder@ module.
+* @DEFAULT_VIEW_PATHS@ is now in @CellNew::Base@.
 * Removed the monkey-patch that made state-args work in Rails <= 3.0.3. Upgrade to +3.0.4.
 
 ## 3.7.1
@@ -343,8 +343,8 @@ Since the blocks are run in cell context, `self` will point to what was `cell` b
 h3. Changes
   * Cache settings using @Base.cache@ are now inherited.
   * Removed <code>@opts</code>.
-  * Removed @#options@ in favor of state-args. If you still want the old behaviour, include the @Deprecations@ module in your cell.
-  * The build process is now instantly delegated to Base.build_for on the concrete cell class.
+  * Removed @#options@ in favor of state-args. If you still want the old behaviour, include the @Deprecations@ module in your cell_new.
+  * The build process is now instantly delegated to Base.build_for on the concrete cell_new class.
 
 ## 3.6.8
 
@@ -361,12 +361,12 @@ h3. Changes
 
 h3. Changes
   * Added the @:format@ option for @#render@ which should be used with caution. Sorry for that.
-  * Removed the useless @layouts/@ view path from Cell::Base.
+  * Removed the useless @layouts/@ view path from CellNew::Base.
 
 ## 3.6.5
 
 h3. Bugfixes
-  * `Cell::TestCase#invoke` now properly accepts state-args.
+  * `CellNew::TestCase#invoke` now properly accepts state-args.
 
 h3. Changes
   * Added the `:if` option to `Base.cache` which allows adding a conditional proc or instance method to the cache definition. If it doesn't return true, caching for that state is skipped.
@@ -375,23 +375,23 @@ h3. Changes
 ## 3.6.4
 
 h3. Bugfixes
-  * Fixes @ArgumentError: wrong number of arguments (1 for 0)@ in @#render_cell@ for Ruby 1.8.
+  * Fixes @ArgumentError: wrong number of arguments (1 for 0)@ in @#render_cell_new@ for Ruby 1.8.
 
 
 ## 3.6.3
 
 h3. Bugfixes
   * [Rails 3.0] Helpers are now properly included (only once). Thanks to [paneq] for a fix.
-  * `#url_options` in the Metal module is now delegated to `parent_controller` which propagates global URL setting like relative URLs to your cells.
+  * `#url_options` in the Metal module is now delegated to `parent_controller` which propagates global URL setting like relative URLs to your cell_news.
 
 h3. Changes
-  * `cells/test_case` is no longer required as it should be loaded automatically.
+  * `cell_news/test_case` is no longer required as it should be loaded automatically.
 
 
 ## 3.6.2
 
 h3. Bugfixes
-  * Fixed cells.gemspec to allow Rails 3.x.
+  * Fixed cell_news.gemspec to allow Rails 3.x.
 
 ## 3.6.1
 
@@ -402,7 +402,7 @@ h3. Changes
 ## 3.6.0
 
 h3. Changes
-  * Cells runs with Rails 3.0 and 3.1.
+  * CellNews runs with Rails 3.0 and 3.1.
 
 
 ## 3.5.6
@@ -414,7 +414,7 @@ h3. Changes
 ## 3.5.5
 
 h3. Bugfixes
-  * The generator now places views of namespaced cells into the correct directory. E.g. `rails g Blog::Post display` puts views to `app/cells/blog/post/display.html.erb`.
+  * The generator now places views of namespaced cell_news into the correct directory. E.g. `rails g Blog::Post display` puts views to `app/cell_news/blog/post/display.html.erb`.
 
 h3. Changes
   * Gem dependencies changed, we now require @actionpack@ and @railties@ >= 3.0.0 instead of @rails@.
@@ -427,24 +427,24 @@ h3. Bugfixes
 
 h3. Changes
 
-  * Cell::Base.view_paths is now setup in an initializer. If you do scary stuff with view_paths this might lead to scary problems.
-  * Cells::DEFAULT_VIEW_PATHS is now Cell::Base::DEFAULT_VIEW_PATHS. Note that Cells will set its view_paths to DEFAULT_VIEW_PATHS at initialization time. If you want to alter the view_paths, use Base.append_view_path and friends in a separate initializer.
+  * CellNew::Base.view_paths is now setup in an initializer. If you do scary stuff with view_paths this might lead to scary problems.
+  * CellNews::DEFAULT_VIEW_PATHS is now CellNew::Base::DEFAULT_VIEW_PATHS. Note that CellNews will set its view_paths to DEFAULT_VIEW_PATHS at initialization time. If you want to alter the view_paths, use Base.append_view_path and friends in a separate initializer.
 
 
 ## 3.5.2
 
 h3. Bugfixes
-  * Controller#render_cell now accepts multiple args as options.
+  * Controller#render_cell_new now accepts multiple args as options.
 
 h3. Changes
-  * Caching versioners now can accept state-args or options from the #render_cell call. This way, you don't have to access #options at all anymore.
+  * Caching versioners now can accept state-args or options from the #render_cell_new call. This way, you don't have to access #options at all anymore.
 
 
 ## 3.5.1
 
-  * No longer pass an explicit Proc but a versioner block to @Cell.Base.cache@. Example: @cache :show do "v1" end@
-  * Caching.cache_key_for now uses @ActiveSupport::Cache.expand_cache_key@. Consequently, a key which used to be like @"cells/director/count/a=1/b=2"@ now is @cells/director/count/a=1&b=2@ and so on. Be warned that this might break your home-made cache expiry.
-  * Controller#expire_cell_state now expects the cell class as first arg. Example: @expire_cell_state(DirectorCell, :count)@
+  * No longer pass an explicit Proc but a versioner block to @CellNew.Base.cache@. Example: @cache :show do "v1" end@
+  * Caching.cache_key_for now uses @ActiveSupport::Cache.expand_cache_key@. Consequently, a key which used to be like @"cell_news/director/count/a=1/b=2"@ now is @cell_news/director/count/a=1&b=2@ and so on. Be warned that this might break your home-made cache expiry.
+  * Controller#expire_cell_new_state now expects the cell_new class as first arg. Example: @expire_cell_new_state(DirectorCellNew, :count)@
 
 h3. Bugfixes
   * Passing options to @render :state@ in views finally works: @render({:state => :list_item}, item, i)@
@@ -456,25 +456,25 @@ h3. Changes
   * Deprecated @opts, use #options now.
   * Added state-args. State methods can now receive the options as method arguments. This should be the prefered way of parameter exchange with the outer world.
   * #params, #request, and #config is now delegated to @parent_controller.
-  * The generator now is invoked as @rails g cell ...@
+  * The generator now is invoked as @rails g cell_new ...@
     * The `--haml` option is no longer available.
     * The `-t` option now is compatible with the rest of rails generators, now it is used as alias for `--test-framework`. Use the `-e` option	as an alias of `--template-engine`
     Thanks to Jorge Calás Lozano <calas@qvitta.net> for patching this in the most reasonable manner i could imagine.
-  * Privatized @#find_family_view_for_state@, @#render_view_for@, and all *ize methods in Cell::Rails.
+  * Privatized @#find_family_view_for_state@, @#render_view_for@, and all *ize methods in CellNew::Rails.
   * New signature: @#render_view_for(state, *args)@
 
 ## 3.4.4
 
 h3. Changes
-  * Cells.setup now yields Cell::Base, so you can really call append_view_path and friends here.
-  * added Cell::Base.build for streamlining the process of deciders around #render_cell, "see here":http://nicksda.apotomo.de/2010/12/pragmatic-rails-thoughts-on-views-inheritance-view-inheritance-and-rails-304
-  * added TestCase#in_view to test helpers in a real cell view.
+  * CellNews.setup now yields CellNew::Base, so you can really call append_view_path and friends here.
+  * added CellNew::Base.build for streamlining the process of deciders around #render_cell_new, "see here":http://nicksda.apotomo.de/2010/12/pragmatic-rails-thoughts-on-views-inheritance-view-inheritance-and-rails-304
+  * added TestCase#in_view to test helpers in a real cell_new view.
 
 
 ## 3.4.3
 
 h3. Changes
-  * #render_cell now accepts a block which yields the cell instance before rendering.
+  * #render_cell_new now accepts a block which yields the cell_new instance before rendering.
 
 h3. Bugfixes
   * We no longer use TestTaskWithoutDescription in our rake tasks.

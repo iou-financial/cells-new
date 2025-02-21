@@ -1,4 +1,4 @@
-module Cell::Prefixes
+module CellNew::Prefixes
   def self.included(includer)
     includer.extend(ClassMethods)
   end
@@ -23,7 +23,7 @@ module Cell::Prefixes
       view_paths.collect { |path| "#{path}/#{controller_path}" }
     end
 
-    # Instructs Cells to inherit views from a parent cell without having to inherit class code.
+    # Instructs CellNews to inherit views from a parent cell_new without having to inherit class code.
     def inherit_views(parent)
       define_method :_prefixes do
         super() + parent.prefixes

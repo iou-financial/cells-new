@@ -1,6 +1,6 @@
-# Enforces the new trailblazer directory layout where cells (or concepts in general) are
+# Enforces the new trailblazer directory layout where cell_news (or concepts in general) are
 # fully self-contained in its own directory.
-module Cell::SelfContained
+module CellNew::SelfContained
   def self_contained!
     extend Prefixes
   end

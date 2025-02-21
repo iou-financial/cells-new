@@ -1,14 +1,14 @@
 require "minitest/autorun"
-require "cells"
+require "cell_new"
 require "cells-erb"
 require "debug"
-
-Cell::ViewModel.send(:include, Cell::Erb) if Cell.const_defined?(:Erb) # FIXME: should happen in inititalizer.
+require "pry"
+CellNew::ViewModel.send(:include, Cell::Erb) if Cell.const_defined?(:Erb) # FIXME: should happen in inititalizer.
 
 Minitest::Spec.class_eval do
-  include Cell::Testing
+  include CellNew::Testing
 end
 
-class BassistCell < Cell::ViewModel
+class BassistCellNew < CellNew::ViewModel
   self.view_paths = ['test/fixtures']
 end

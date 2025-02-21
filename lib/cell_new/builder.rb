@@ -1,6 +1,6 @@
 require "declarative/builder"
 
-module Cell
+module CellNew
   module Builder
     def self.included(base)
       base.send :include, Declarative::Builder

@@ -1,6 +1,6 @@
 require "uber/delegates"
 
-module Cell
+module CellNew
   class ViewModel
     extend Abstract
     abstract!
@@ -9,7 +9,7 @@ module Cell
     extend Uber::Delegates
 
     inheritable_attr :view_paths
-    self.view_paths = ["app/cells"]
+    self.view_paths = ["app/cell_news"]
 
     class << self
       def templates
@@ -21,15 +21,15 @@ module Cell
     extend Util
 
     def self.controller_path
-      @controller_path ||= util.underscore(name.sub(/Cell$/, ''))
+      @controller_path ||= util.underscore(name.sub(/CellNew$/, ''))
     end
 
     attr_reader :model
 
     module Helpers
       # Constantizes name if needed, call builders and returns instance.
-      def cell(name, *args, &block) # classic Rails fuzzy API.
-        constant = name.is_a?(Class) ? name : class_from_cell_name(name)
+      def cell_new(name, *args, &block) # classic Rails fuzzy API.
+        constant = name.is_a?(Class) ? name : class_from_cell_new_name(name)
         constant.(*args, &block)
       end
     end
@@ -40,10 +40,10 @@ module Cell
         delegates :model, *names # Uber::Delegates.
       end
 
-      # Public entry point. Use this to instantiate cells with builders.
+      # Public entry point. Use this to instantiate cell_news with builders.
       #
-      #   SongCell.(@song)
-      #   SongCell.(collection: Song.all)
+      #   SongCellNew.(@song)
+      #   SongCellNew.(collection: Song.all)
       def call(model=nil, options={}, &block)
         if model.is_a?(Hash) and array = model[:collection]
           return Collection.new(array, model.merge(options), self)
@@ -52,19 +52,19 @@ module Cell
         build(model, options)
       end
 
-      alias build new # semi-public for Cell::Builder
+      alias build new # semi-public for CellNew::Builder
 
     private
-      def class_from_cell_name(name)
-        util.constant_for("#{name}_cell")
+      def class_from_cell_new_name(name)
+        util.constant_for("#{name}_cell_new")
       end
     end
 
-    # Build nested cell in instance.
-    def cell(name, model=nil, options={})
+    # Build nested cell_new in instance.
+    def cell_new(name, model=nil, options={})
       context = Context[options[:context], self.context]
 
-      self.class.cell(name, model, options.merge(context: context))
+      self.class.cell_new(name, model, options.merge(context: context))
     end
 
     def initialize(model=nil, options={})
@@ -77,7 +77,7 @@ module Cell
 
     # DISCUSS: we could use the same mechanism as TRB::Skills here for speed at runtime?
     class Context# < Hash
-      # Only dup&merge when :context was passed in parent.cell(context: ..)
+      # Only dup&merge when :context was passed in parent.cell_new(context: ..)
       # Otherwise we can simply pass on the old context.
       def self.[](options, context)
         return context unless options

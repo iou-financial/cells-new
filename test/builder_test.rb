@@ -4,14 +4,14 @@ class BuilderTest < Minitest::Spec
   Song = Struct.new(:title)
   Hit  = Struct.new(:title)
 
-  class SongCell < Cell::ViewModel
-    include Cell::Builder
+  class SongCellNew < CellNew::ViewModel
+    include CellNew::Builder
 
     builds do |model, options|
       if model.is_a? Hit
-        HitCell
+        HitCellNew
       elsif options[:evergreen]
-        EvergreenCell
+        EvergreenCellNew
       end
     end
 
@@ -26,38 +26,38 @@ class BuilderTest < Minitest::Spec
     property :title
   end
 
-  class HitCell < SongCell
+  class HitCellNew < SongCellNew
     def show
       "* **#{title}**"
     end
   end
 
-  class EvergreenCell < SongCell
+  class EvergreenCellNew < SongCellNew
   end
 
   # the original class is used when no builder matches.
-  it { assert_instance_of SongCell, SongCell.(Song.new("Nation States"), {}) }
+  it { assert_instance_of SongCellNew, SongCellNew.(Song.new("Nation States"), {}) }
 
   it do
-    cell = SongCell.(Hit.new("New York"), {})
-    assert_instance_of HitCell, cell
-    assert_equal({}, cell.options)
+    cell_new = SongCellNew.(Hit.new("New York"), {})
+    assert_instance_of HitCellNew, cell_new
+    assert_equal({}, cell_new.options)
   end
 
   it do
-    cell = SongCell.(Song.new("San Francisco"), evergreen: true)
-    assert_instance_of EvergreenCell, cell
-    assert_equal({evergreen: true}, cell.options)
+    cell_new = SongCellNew.(Song.new("San Francisco"), evergreen: true)
+    assert_instance_of EvergreenCellNew, cell_new
+    assert_equal({evergreen: true}, cell_new.options)
   end
 
   # without arguments.
-  it { assert_instance_of HitCell, SongCell.(Hit.new("Frenzy")) }
+  it { assert_instance_of HitCellNew, SongCellNew.(Hit.new("Frenzy")) }
 
   # with collection.
-  it { assert_equal "* Nation States* **New York**", SongCell.(collection: [Song.new("Nation States"), Hit.new("New York")]).() }
+  it { assert_equal "* Nation States* **New York**", SongCellNew.(collection: [Song.new("Nation States"), Hit.new("New York")]).() }
 
   # with Concept
-  class Track < Cell::Concept
+  class Track < CellNew::Concept
   end
   it { assert_instance_of Track, Track.() }
 end

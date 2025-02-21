@@ -1,46 +1,46 @@
-# Cells
+# CellNews
 
 *View Components for Ruby and Rails.*
 
 [![Zulip Chat](https://badges.gitter.im/trailblazer/chat.svg)](https://trailblazer.zulipchat.com/login/)
 [![TRB Newsletter](https://img.shields.io/badge/TRB-newsletter-lightgrey.svg)](https://trailblazer.to/2.1/#callout-section)
 ![Build
-Status](https://github.com/trailblazer/cells/actions/workflows/ci.yml/badge.svg
+Status](https://github.com/trailblazer/cell_news/actions/workflows/ci.yml/badge.svg
 )
-[![Gem Version](https://badge.fury.io/rb/cells.svg)](http://badge.fury.io/rb/cells)
+[![Gem Version](https://badge.fury.io/rb/cell_news.svg)](http://badge.fury.io/rb/cell_news)
 
 ## Overview
 
-Cells allow you to encapsulate parts of your UI into components into _view models_. View models, or cells, are simple ruby classes that can render templates.
+CellNews allow you to encapsulate parts of your UI into components into _view models_. View models, or cell_news, are simple ruby classes that can render templates.
 
-Nevertheless, a cell gives you more than just a template renderer. They allow proper OOP, polymorphic builders, [nesting](#nested-cells), view inheritance, using Rails helpers, [asset packaging](https://trailblazer.to/2.1/docs/cells.html#cells-rails-asset-pipeline) to bundle JS, CSS or images, simple distribution via gems or Rails engines, encapsulated testing, [caching](#caching), and [integrate with Trailblazer](https://github.com/trailblazer/trailblazer-cells).
+Nevertheless, a cell_new gives you more than just a template renderer. They allow proper OOP, polymorphic builders, [nesting](#nested-cell_news), view inheritance, using Rails helpers, [asset packaging](https://trailblazer.to/2.1/docs/cell_news.html#cell_news-rails-asset-pipeline) to bundle JS, CSS or images, simple distribution via gems or Rails engines, encapsulated testing, [caching](#caching), and [integrate with Trailblazer](https://github.com/trailblazer/trailblazer-cell_news).
 
 ## Full Documentation
 
-Cells is part of the Trailblazer framework. [Full documentation](https://trailblazer.to/2.1/docs/cells/) is available on the project site.
+CellNews is part of the Trailblazer framework. [Full documentation](https://trailblazer.to/2.1/docs/cell_news/) is available on the project site.
 
-Cells is completely decoupled from Rails. However, Rails-specific functionality is to be found [here](https://trailblazer.to/2.1/docs/cells/#cells-4-rails).
+CellNews is completely decoupled from Rails. However, Rails-specific functionality is to be found [here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-rails).
 
-## Rendering Cells
+## Rendering CellNews
 
-You can render cells anywhere and as many as you want, in views, controllers, composites, mailers, etc.
+You can render cell_news anywhere and as many as you want, in views, controllers, composites, mailers, etc.
 
-Rendering a cell in Rails ironically happens via a helper.
+Rendering a cell_new in Rails ironically happens via a helper.
 
 ```ruby
-<%= cell(:comment, @comment) %>
+<%= cell_new(:comment, @comment) %>
 ```
 
-This boils down to the following invocation, that can be used to render cells in *any other Ruby* environment.
+This boils down to the following invocation, that can be used to render cell_news in *any other Ruby* environment.
 
 ```ruby
-CommentCell.(@comment).()
+CommentCellNew.(@comment).()
 ```
 
-You can also pass the cell class in explicitly:
+You can also pass the cell_new class in explicitly:
 
 ```ruby
-<%= cell(CommentCell, @comment) %>
+<%= cell_new(CommentCellNew, @comment) %>
 ```
 
 In Rails you have the same helper API for views and controllers.
@@ -48,19 +48,19 @@ In Rails you have the same helper API for views and controllers.
 ```ruby
 class DashboardController < ApplicationController
   def dashboard
-    @comments = cell(:comment, collection: Comment.recent)
-    @traffic  = cell(:report, TrafficReport.find(1)).()
+    @comments = cell_new(:comment, collection: Comment.recent)
+    @traffic  = cell_new(:report, TrafficReport.find(1)).()
   end
 ```
 
-Usually, you'd pass in one or more objects you want the cell to present. That can be an ActiveRecord model, a ROM instance or any kind of PORO you fancy.
+Usually, you'd pass in one or more objects you want the cell_new to present. That can be an ActiveRecord model, a ROM instance or any kind of PORO you fancy.
 
-## Cell Class
+## CellNew Class
 
-A cell is a light-weight class with one or multiple methods that render views.
+A cell_new is a light-weight class with one or multiple methods that render views.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   property :body
   property :author
 
@@ -80,7 +80,7 @@ Here, `show` is the only public method. By calling `render` it will invoke rende
 
 ## Logicless Views
 
-Views come packaged with the cell and can be ERB, Haml, or Slim.
+Views come packaged with the cell_new and can be ERB, Haml, or Slim.
 
 ```erb
 <h3>New Comment</h3>
@@ -89,45 +89,45 @@ Views come packaged with the cell and can be ERB, Haml, or Slim.
 By <%= author_link %>
 ```
 
-The concept of "helpers" that get strangely copied from modules to the view does not exist in Cells anymore.
+The concept of "helpers" that get strangely copied from modules to the view does not exist in CellNews anymore.
 
-Methods called in the view are directly called _on the cell instance_. You're free to use loops and deciders in views, even instance variables are allowed, but Cells tries to push you gently towards method invocations to access data in the view.
+Methods called in the view are directly called _on the cell_new instance_. You're free to use loops and deciders in views, even instance variables are allowed, but CellNews tries to push you gently towards method invocations to access data in the view.
 
 ## File Structure
 
-In Rails, cells are placed in `app/cells` or `app/concepts/`. Every cell has their own directory where it keeps views, assets and code.
+In Rails, cell_news are placed in `app/cell_news` or `app/concepts/`. Every cell_new has their own directory where it keeps views, assets and code.
 
 ```
 app
-├── cells
-│   ├── comment_cell.rb
+├── cell_news
+│   ├── comment_cell_new.rb
 │   ├── comment
 │   │   ├── show.haml
 │   │   ├── list.haml
 ```
 
-The discussed `show` view would reside in `app/cells/comment/show.haml`. However, you can set [any set of view paths](#view-paths) you want.
+The discussed `show` view would reside in `app/cell_news/comment/show.haml`. However, you can set [any set of view paths](#view-paths) you want.
 
 
 ## Invocation Styles
 
-In order to make a cell render, you have to call the rendering methods. While you could call the method directly, the preferred way is the _call style_.
+In order to make a cell_new render, you have to call the rendering methods. While you could call the method directly, the preferred way is the _call style_.
 
 ```ruby
-cell(:comment, @song).()       # calls CommentCell#show.
-cell(:comment, @song).(:index) # calls CommentCell#index.
+cell_new(:comment, @song).()       # calls CommentCellNew#show.
+cell_new(:comment, @song).(:index) # calls CommentCellNew#index.
 ```
 
 The call style respects caching.
 
-Keep in mind that `cell(..)` really gives you the cell object. In case you want to reuse the cell, need setup logic, etc. that's completely up to you.
+Keep in mind that `cell_new(..)` really gives you the cell_new object. In case you want to reuse the cell_new, need setup logic, etc. that's completely up to you.
 
 ## Parameters
 
 You can pass in as many parameters as you need. Per convention, this is a hash.
 
 ```ruby
-cell(:comment, @song, volume: 99, genre: "Jazz Fusion")
+cell_new(:comment, @song, volume: 99, genre: "Jazz Fusion")
 ```
 
 Options can be accessed via the `@options` instance variable.
@@ -135,7 +135,7 @@ Options can be accessed via the `@options` instance variable.
 Naturally, you may also pass arbitrary options into the call itself. Those will be simple method arguments.
 
 ```ruby
-cell(:comment, @song).(:show, volume: 99)
+cell_new(:comment, @song).(:show, volume: 99)
 ```
 
 Then, the `show` method signature changes to `def show(options)`.
@@ -146,20 +146,20 @@ Then, the `show` method signature changes to `def show(options)`.
 A huge benefit from "all this encapsulation" is that you can easily write tests for your components. The API does not change and everything is exactly as it would be in production.
 
 ```ruby
-html = CommentCell.(@comment).()
+html = CommentCellNew.(@comment).()
 Capybara.string(html).must_have_css "h3"
 ```
 
-It is completely up to you how you test, whether it's RSpec, MiniTest or whatever. All the cell does is return HTML.
+It is completely up to you how you test, whether it's RSpec, MiniTest or whatever. All the cell_new does is return HTML.
 
-[In Rails, there's support](https://trailblazer.to/2.1/docs/cells/#cells-4-overview-testing) for TestUnit, MiniTest and RSpec available, along with Capybara integration.
+[In Rails, there's support](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-overview-testing) for TestUnit, MiniTest and RSpec available, along with Capybara integration.
 
 ## Properties
 
-The cell's model is available via the `model` reader. You can have automatic readers to the model's fields by using `::property`.
+The cell_new's model is available via the `model` reader. You can have automatic readers to the model's fields by using `::property`.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   property :author # delegates to model.author
 
   def author_link
@@ -170,82 +170,82 @@ end
 
 ## HTML Escaping
 
-Cells per default does no HTML escaping, anywhere. Include `Escaped` to make property readers return escaped strings.
+CellNews per default does no HTML escaping, anywhere. Include `Escaped` to make property readers return escaped strings.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   include Escaped
 
   property :title
 end
 
 song.title                 #=> "<script>Dangerous</script>"
-Comment::Cell.(song).title #=> &lt;script&gt;Dangerous&lt;/script&gt;
+Comment::CellNew.(song).title #=> &lt;script&gt;Dangerous&lt;/script&gt;
 ```
 
-Properties and escaping are [documented here](https://trailblazer.to/2.1/docs/cells/#cells-4-api-html-escaping).
+Properties and escaping are [documented here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-api-html-escaping).
 
 ## Installation
 
-Cells runs with any framework.
+CellNews runs with any framework.
 
 ```ruby
-gem "cells"
+gem "cell_news"
 ```
 
-For Rails, please use the [cells-rails](https://github.com/trailblazer/cells-rails) gem. It supports Rails >= 4.0.
+For Rails, please use the [cell_news-rails](https://github.com/trailblazer/cell_news-rails) gem. It supports Rails >= 4.0.
 
 ```ruby
-gem "cells-rails"
+gem "cell_news-rails"
 ```
 
-Lower versions of Rails will still run with Cells, but you will get in trouble with the helpers. (Note: we use Cells in production with Rails 3.2 and Haml and it works great.)
+Lower versions of Rails will still run with CellNews, but you will get in trouble with the helpers. (Note: we use CellNews in production with Rails 3.2 and Haml and it works great.)
 
 Various template engines are supported but need to be added to your Gemfile.
 
-* [cells-erb](https://github.com/trailblazer/cells-erb)
-* [cells-hamlit](https://github.com/trailblazer/cells-hamlit) We strongly recommend using [Hamlit](https://github.com/k0kubun/hamlit) as a Haml replacement.
-* [cells-haml](https://github.com/trailblazer/cells-haml) Make sure to bundle Haml 4.1: `gem "haml", github: "haml/haml", ref: "7c7c169"`. Use `cells-hamlit` instead.
-* [cells-slim](https://github.com/trailblazer/cells-slim)
+* [cell_news-erb](https://github.com/trailblazer/cell_news-erb)
+* [cell_news-hamlit](https://github.com/trailblazer/cell_news-hamlit) We strongly recommend using [Hamlit](https://github.com/k0kubun/hamlit) as a Haml replacement.
+* [cell_news-haml](https://github.com/trailblazer/cell_news-haml) Make sure to bundle Haml 4.1: `gem "haml", github: "haml/haml", ref: "7c7c169"`. Use `cell_news-hamlit` instead.
+* [cell_news-slim](https://github.com/trailblazer/cell_news-slim)
 
 ```ruby
-gem "cells-erb"
+gem "cell_news-erb"
 ```
 
-In Rails, this is all you need to do. In other environments, you need to include the respective module into your cells.
+In Rails, this is all you need to do. In other environments, you need to include the respective module into your cell_news.
 
 ```ruby
-class CommentCell < Cell::ViewModel
-  include ::Cell::Erb # or Cell::Hamlit, or Cell::Haml, or Cell::Slim
+class CommentCellNew < CellNew::ViewModel
+  include ::CellNew::Erb # or CellNew::Hamlit, or CellNew::Haml, or CellNew::Slim
 end
 ```
 
 ## Namespaces
 
-Cells can be namespaced as well.
+CellNews can be namespaced as well.
 
 ```ruby
 module Admin
-  class CommentCell < Cell::ViewModel
+  class CommentCellNew < CellNew::ViewModel
 ```
 
 Invocation in Rails would happen as follows.
 
 ```ruby
-cell("admin/comment", @comment).()
+cell_new("admin/comment", @comment).()
 ```
 
-Views will be searched in `app/cells/admin/comment` per default.
+Views will be searched in `app/cell_news/admin/comment` per default.
 
 
 ## Rails Helper API
 
-Even in a non-Rails environment, Cells provides the Rails view API and allows using all Rails helpers.
+Even in a non-Rails environment, CellNews provides the Rails view API and allows using all Rails helpers.
 
-You have to include all helper modules into your cell class. You can then use `link_to`, `simple_form_for` or whatever you feel like.
+You have to include all helper modules into your cell_new class. You can then use `link_to`, `simple_form_for` or whatever you feel like.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::CaptureHelper
 
@@ -254,24 +254,24 @@ class CommentCell < Cell::ViewModel
   end
 ```
 
-As always, you can use helpers in cells and in views.
+As always, you can use helpers in cell_news and in views.
 
-You might run into problems with wrong escaping or missing URL helpers. This is not Cells' fault but Rails suboptimal way of implementing and interfacing their helpers. Please open the actionview gem helper code and try figuring out the problem yourself before bombarding us with issues because helper `xyz` doesn't work.
+You might run into problems with wrong escaping or missing URL helpers. This is not CellNews' fault but Rails suboptimal way of implementing and interfacing their helpers. Please open the actionview gem helper code and try figuring out the problem yourself before bombarding us with issues because helper `xyz` doesn't work.
 
 
 ## View Paths
 
-In Rails, the view path is automatically set to `app/cells/` or `app/concepts/`. You can append or set view paths by using `::view_paths`. Of course, this works in any Ruby environment.
+In Rails, the view path is automatically set to `app/cell_news/` or `app/concepts/`. You can append or set view paths by using `::view_paths`. Of course, this works in any Ruby environment.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   self.view_paths = "lib/views"
 end
 ```
 
 ## Asset Packaging
 
-Cells can easily ship with their own JavaScript, CSS and more and be part of Rails' asset pipeline. Bundling assets into a cell allows you to implement super encapsulated widgets that are stand-alone. Asset pipeline is [documented here](https://trailblazer.to/2.1/docs/cells/#cells-4-rails-asset-pipeline).
+CellNews can easily ship with their own JavaScript, CSS and more and be part of Rails' asset pipeline. Bundling assets into a cell_new allows you to implement super encapsulated widgets that are stand-alone. Asset pipeline is [documented here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-rails-asset-pipeline).
 
 ## Render API
 
@@ -309,16 +309,16 @@ render layout: :default
 Or configure it on the class-level.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   layout :default
 ```
 
 The layout is treated as a view and will be searched in the same directories.
 
 
-## Nested Cells
+## Nested CellNews
 
-Cells love to render. You can render as many views as you need in a cell state or view.
+CellNews love to render. You can render as many views as you need in a cell_new state or view.
 
 ```ruby
 <%= render :index %>
@@ -332,65 +332,65 @@ def show
 end
 ```
 
-You can even render other cells _within_ a cell using the exact same API.
+You can even render other cell_news _within_ a cell_new using the exact same API.
 
 ```ruby
 def about
-  cell(:profile, model.author).()
+  cell_new(:profile, model.author).()
 end
 ```
 
-This works both in cell views and on the instance, in states.
+This works both in cell_new views and on the instance, in states.
 
 
 ## View Inheritance
 
-You can not only inherit code across cell classes, but also views. This is extremely helpful if you want to override parts of your UI, only. It's [documented here](https://trailblazer.to/2.1/docs/cells/#cells-4-api-view-inheritance).
+You can not only inherit code across cell_new classes, but also views. This is extremely helpful if you want to override parts of your UI, only. It's [documented here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-api-view-inheritance).
 
 ## Collections
 
-In order to render collections, Cells comes with a shortcut.
+In order to render collections, CellNews comes with a shortcut.
 
 ```ruby
 comments = Comment.all #=> three comments.
-cell(:comment, collection: comments).()
+cell_new(:comment, collection: comments).()
 ```
 
-This will invoke `cell(:comment, comment).()` three times and concatenate the rendered output automatically.
+This will invoke `cell_new(:comment, comment).()` three times and concatenate the rendered output automatically.
 
-Learn more [about collections here](https://trailblazer.to/2.1/docs/cells/#cells-4-api-collection).
+Learn more [about collections here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-api-collection).
 
 
 ## Builder
 
-Builders allow instantiating different cell classes for different models and options. They introduce polymorphism into cells.
+Builders allow instantiating different cell_new classes for different models and options. They introduce polymorphism into cell_news.
 
 ```ruby
-class CommentCell < Cell::ViewModel
-  include ::Cell::Builder
+class CommentCellNew < CellNew::ViewModel
+  include ::CellNew::Builder
 
   builds do |model, options|
     case model
-    when Post; PostCell
-    when Comment; CommentCell
+    when Post; PostCellNew
+    when Comment; CommentCellNew
     end
   end
 ```
 
-The `#cell` helper takes care of instantiating the right cell class for you.
+The `#cell_new` helper takes care of instantiating the right cell_new class for you.
 
 ```ruby
-cell(:comment, Post.find(1)) #=> creates a PostCell.
+cell_new(:comment, Post.find(1)) #=> creates a PostCellNew.
 ```
 
-Learn more [about builders here](https://trailblazer.to/2.1/docs/cells/#cells-4-api-builder).
+Learn more [about builders here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-api-builder).
 
 ## Caching
 
-For every cell class you can define caching per state. Without any configuration the cell will run and render the state once. In following invocations, the cached fragment is returned.
+For every cell_new class you can define caching per state. Without any configuration the cell_new will run and render the state once. In following invocations, the cached fragment is returned.
 
 ```ruby
-class CommentCell < Cell::ViewModel
+class CommentCellNew < CellNew::ViewModel
   cache :show
   # ..
 end
@@ -402,26 +402,26 @@ The `::cache` method will forward options to the caching engine.
 cache :show, expires_in: 10.minutes
 ```
 
-You can also compute your own cache key, use dynamic keys, cache tags, and conditionals using `:if`. Caching is documented [here](https://trailblazer.to/2.1/docs/cells/#cells-4-api-caching) and in chapter 8 of the [Trailblazer book](http://leanpub.com/trailblazer).
+You can also compute your own cache key, use dynamic keys, cache tags, and conditionals using `:if`. Caching is documented [here](https://trailblazer.to/2.1/docs/cell_news/#cell_news-4-api-caching) and in chapter 8 of the [Trailblazer book](http://leanpub.com/trailblazer).
 
 
 ## The Book
 
-Cells is part of the [Trailblazer project](https://github.com/apotonick/trailblazer). Please [buy my book](https://leanpub.com/trailblazer) to support the development and to learn all the cool stuff about Cells. The book discusses many use cases of Cells.
+CellNews is part of the [Trailblazer project](https://github.com/apotonick/trailblazer). Please [buy my book](https://leanpub.com/trailblazer) to support the development and to learn all the cool stuff about CellNews. The book discusses many use cases of CellNews.
 
 [![trb](https://raw.githubusercontent.com/apotonick/trailblazer/master/doc/trb.jpg)](https://leanpub.com/trailblazer)
 
-* Basic view models, replacing helpers, and how to structure your view into cell components (chapter 2 and 4).
-* Advanced Cells API (chapter 4 and 6).
-* Testing Cells (chapter 4 and 6).
-* Cells Pagination with AJAX (chapter 6).
+* Basic view models, replacing helpers, and how to structure your view into cell_new components (chapter 2 and 4).
+* Advanced CellNews API (chapter 4 and 6).
+* Testing CellNews (chapter 4 and 6).
+* CellNews Pagination with AJAX (chapter 6).
 * View Caching and Expiring (chapter 8).
 
 The book picks up where the README leaves off. Go grab a copy and support us - it talks about object- and view design and covers all aspects of the API.
 
-## This is not Cells 3.x!
+## This is not CellNews 3.x!
 
-Temporary note: This is the README and API for Cells 4. Many things have improved. If you want to upgrade, [follow this guide](https://github.com/apotonick/cells/wiki/From-Cells-3-to-Cells-4---Upgrading-Guide). When in trouble, join the [Zulip channel](https://trailblazer.zulipchat.com/login/).
+Temporary note: This is the README and API for CellNews 4. Many things have improved. If you want to upgrade, [follow this guide](https://github.com/apotonick/cell_news/wiki/From-CellNews-3-to-CellNews-4---Upgrading-Guide). When in trouble, join the [Zulip channel](https://trailblazer.zulipchat.com/login/).
 
 ## LICENSE
 

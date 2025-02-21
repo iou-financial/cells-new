@@ -1,6 +1,6 @@
 require 'disposable/twin'
 
-module Cell
+module CellNew
   module Twin
     def self.included(base)
       base.send :include, Disposable::Twin::Builder

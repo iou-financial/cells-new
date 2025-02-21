@@ -1,6 +1,6 @@
-module Cell
+module CellNew
   class ViewModel
-    # Set the layout per cell class. This is used in #render calls. Gets inherited to subclasses.
+    # Set the layout per cell_new class. This is used in #render calls. Gets inherited to subclasses.
     module Layout
       def self.included(base)
         base.extend ClassMethods
@@ -34,8 +34,8 @@ module Cell
         render_template(template, options) { content }
       end
 
-      # Allows using a separate layout cell which will wrap the actual content.
-      # Use like cell(..., layout: Cell::Layout)
+      # Allows using a separate layout cell_new which will wrap the actual content.
+      # Use like cell_new(..., layout: CellNew::Layout)
       #
       # Note that still allows the `render layout: :application` option.
       module External
@@ -45,9 +45,9 @@ module Cell
         end
 
         Render = ->(content, model, layout, options) do # WARNING: THIS IS NOT FINAL API.
-          return content unless layout = layout # TODO: test when invoking cell without :layout.
+          return content unless layout = layout # TODO: test when invoking cell_new without :layout.
 
-          # DISCUSS: should we allow instances, too? we could cache the layout cell.
+          # DISCUSS: should we allow instances, too? we could cache the layout cell_new.
           layout.new(model, context: options[:context]).(&lambda { content })
         end
       end # External

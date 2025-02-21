@@ -1,4 +1,4 @@
-module Cell
+module CellNew
   # Gets cached in production.
   class Templates
     # prefixes could be instance variable as they will never change.
@@ -14,7 +14,7 @@ module Cell
 
     def find_template(prefixes, view, options) # options is not considered in cache key.
       cache.fetch(prefixes, view) do |prefix|
-        # this block is run once per cell class per process, for each prefix/view tuple.
+        # this block is run once per cell_new class per process, for each prefix/view tuple.
         create(prefix, view, options)
       end
     end

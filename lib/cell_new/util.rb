@@ -1,4 +1,4 @@
-module Cell::Util
+module CellNew::Util
   def util
     Inflector
   end

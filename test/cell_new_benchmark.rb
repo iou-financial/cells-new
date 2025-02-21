@@ -4,7 +4,7 @@ require 'benchmark'
 Song = Struct.new(:title)
 
 
-class SongCell < Cell::ViewModel
+class SongCellNew < CellNew::ViewModel
   self.view_paths = ['test']
   property :title
 
@@ -14,7 +14,7 @@ class SongCell < Cell::ViewModel
 end
 
 time = Benchmark.measure do
-  Cell::ViewModel.cell(:song, nil, collection: 1000.times.collect { Song.new("Anarchy Camp") })
+  CellNew::ViewModel.cell_new(:song, nil, collection: 1000.times.collect { Song.new("Anarchy Camp") })
 end
 
 puts time

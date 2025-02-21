@@ -1,8 +1,8 @@
 require "rake/testtask"
 
 namespace "test" do
-  Rake::TestTask.new(:cells) do |t|
+  Rake::TestTask.new(:cell_news) do |t|
     t.libs << "test"
-    t.pattern = 'test/cells/**/*_test.rb'
+    t.pattern = 'test/cell_news/**/*_test.rb'
   end
 end

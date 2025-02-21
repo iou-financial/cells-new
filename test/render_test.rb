@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class SongCell < Cell::ViewModel
+class SongCellNew < CellNew::ViewModel
   self.view_paths = ['test/fixtures']
-  # include ::Cell::Erb
+  # include ::CellNew::Erb
 
   def show
     render
@@ -63,44 +63,44 @@ end
 
 class RenderTest < Minitest::Spec
   # render show.haml calling method, implicit render.
-  it { assert_equal "Papertiger\n", SongCell.new(nil).show }
+  it { assert_equal "Papertiger\n", SongCellNew.new(nil).show }
 
   # render ivar.haml using instance variable.
-  it { assert_equal "Carnage\n", SongCell.new(nil).ivar }
+  it { assert_equal "Carnage\n", SongCellNew.new(nil).ivar }
 
   # render string.
-  it { assert_equal "Right", SongCell.new(nil).string }
+  it { assert_equal "Right", SongCellNew.new(nil).string }
 
   # #call renders :show
-  it { assert_equal "Papertiger\n", SongCell.new(nil).call }
+  it { assert_equal "Papertiger\n", SongCellNew.new(nil).call }
 
   # call(:form) renders :form
-  it { assert_equal "Man Of Steel\n", SongCell.new(nil).call(:with_view_name) }
+  it { assert_equal "Man Of Steel\n", SongCellNew.new(nil).call(:with_view_name) }
 
   # works with state called `send`
-  it { assert_equal "send", SongCell.new(nil).call(:send) }
+  it { assert_equal "send", SongCellNew.new(nil).call(:send) }
 
   # throws an exception when not found.
   it do
-    exception = assert_raises(Cell::TemplateMissingError) { SongCell.new(nil).unknown }
+    exception = assert_raises(CellNew::TemplateMissingError) { SongCellNew.new(nil).unknown }
     assert_equal "Template missing: view: `unknown.erb` prefixes: [\"test/fixtures/song\"]", exception.message
   end
 
   # allows locals
-  it { assert_equal "Shot Across The Bow\n280\n", SongCell.new(nil).with_locals }
+  it { assert_equal "Shot Across The Bow\n280\n", SongCellNew.new(nil).with_locals }
 
   # render :form is a shortcut.
-  it { assert_equal "Man Of Steel\n", SongCell.new(nil).with_view_name }
+  it { assert_equal "Man Of Steel\n", SongCellNew.new(nil).with_view_name }
 
   # allows passing in options DISCUSS: how to handle that in cache block/builder?
-  it { assert_equal "default", SongCell.new(nil).receiving_options }
-  it { assert_equal "fancy", SongCell.new(nil).receiving_options(:fancy) }
-  it { assert_equal "fancy", SongCell.new(nil).call(:receiving_options, :fancy) }
-  it { assert_equal "A new song\n", SongCell.new(nil).call(:with_options, title: 'A new song') }
+  it { assert_equal "default", SongCellNew.new(nil).receiving_options }
+  it { assert_equal "fancy", SongCellNew.new(nil).receiving_options(:fancy) }
+  it { assert_equal "fancy", SongCellNew.new(nil).call(:receiving_options, :fancy) }
+  it { assert_equal "A new song\n", SongCellNew.new(nil).call(:with_options, title: 'A new song') }
 
   # doesn't escape HTML.
-  it { assert_equal "<p>Yew!</p>", SongCell.new(nil).call(:with_html) }
+  it { assert_equal "<p>Yew!</p>", SongCellNew.new(nil).call(:with_html) }
 
   # render {} with block
-  it { assert_equal "Yo! Clean Sheets<p>Yew!</p>\n", SongCell.new(nil).with_block }
+  it { assert_equal "Yo! Clean Sheets<p>Yew!</p>\n", SongCellNew.new(nil).with_block }
 end
